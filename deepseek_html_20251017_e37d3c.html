@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英文标点转中文标点工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        .description {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+        
+        .converter {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .convert-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .convert-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .copy-btn {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .copy-btn:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+        
+        .clear-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .clear-btn:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .reference {
+            margin-top: 30px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .reference h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .reference-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .reference-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .english {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
+        .chinese {
+            color: #2ecc71;
+            font-weight: 600;
+        }
+        
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .reference-table {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>英文标点转中文标点工具</h1>
+            <p class="description">将文本中的英文标点符号自动转换为中文标点符号，支持实时转换和一键复制</p>
+        </header>
+        
+        <div class="converter">
+            <div class="input-group">
+                <label for="input-text">输入文本（英文标点）</label>
+                <textarea id="input-text" placeholder="请输入包含英文标点符号的文本，例如: Hello, world! How are you? I'm fine. Thank you!"></textarea>
+            </div>
+            
+            <div class="buttons">
+                <button class="convert-btn" id="convert-btn">转换标点</button>
+                <button class="copy-btn" id="copy-btn">复制结果</button>
+                <button class="clear-btn" id="clear-btn">清空文本</button>
+            </div>
+            
+            <div class="input-group">
+                <label for="output-text">转换结果（中文标点）</label>
+                <textarea id="output-text" placeholder="转换后的文本将显示在这里" readonly></textarea>
+            </div>
+        </div>
+        
+        <div class="reference">
+            <h2>常见标点符号对照表</h2>
+            <div class="reference-table">
+                <div class="reference-item">
+                    <span class="english">,</span>
+                    <span>→</span>
+                    <span class="chinese">，</span>
+                </div>
+                <div class="reference-item">
+                    <span class="english">.</span>
+                    <span>→</span>
+                    <span class="chinese">。</span>
+                </div>
+                <div class="reference-item">
+                    <span class="english">?</span>
+                    <span>→</span>
+                    <span class="chinese">？</span>
+                </div>
+                <div class="reference-item">
+                    <span class="english">!</span>
+                    <span>→</span>
+                    <span class="chinese">！</span>
+                </div>
+                <div class="reference-item">
+                    <span class="english">:</span>
+                    <span>→</span>
+                    <span class="chinese">：</span>
+                </div>
+                <div class="reference-item">
+                    <span class="english">;</span>
+                    <span>→</span>
+                    <span class="chinese">；</span>
+                </div>
+                <div class="reference-item">
+                    <span class="english">"</span>
+                    <span>→</span>
+                    <span class="chinese">“ ”</span>
+                </div>
+                <div class="reference-item">
+                    <span class="english">'</span>
+                    <span>→</span>
+                    <span class="chinese">‘ ’</span>
+                </div>
+                <div class="reference-item">
+                    <span class="english">(</span>
+                    <span>→</span>
+                    <span class="chinese">（</span>
+                </div>
+                <div class="reference-item">
+                    <span class="english">)</span>
+                    <span>→</span>
+                    <span class="chinese">）</span>
+                </div>
+                <div class="reference-item">
+                    <span class="english"><</span>
+                    <span>→</span>
+                    <span class="chinese">《</span>
+                </div>
+                <div class="reference-item">
+                    <span class="english">></span>
+                    <span>→</span>
+                    <span class="chinese">》</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2023 英文标点转中文标点工具 | 纯HTML实现</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputText = document.getElementById('input-text');
+            const outputText = document.getElementById('output-text');
+            const convertBtn = document.getElementById('convert-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            
+            // 标点符号映射表
+            const punctuationMap = {
+                ',': '，',
+                '.': '。',
+                '?': '？',
+                '!': '！',
+                ':': '：',
+                ';': '；',
+                '"': '“',
+                "'": '‘',
+                '(': '（',
+                ')': '）',
+                '<': '《',
+                '>': '》'
+            };
+            
+            // 转换函数
+            function convertPunctuation(text) {
+                let result = text;
+                
+                // 处理双引号 - 需要成对替换
+                let quoteCount = 0;
+                result = result.replace(/"/g, function(match) {
+                    quoteCount++;
+                    return quoteCount % 2 === 1 ? '“' : '”';
+                });
+                
+                // 处理单引号 - 需要成对替换
+                let singleQuoteCount = 0;
+                result = result.replace(/'/g, function(match) {
+                    singleQuoteCount++;
+                    return singleQuoteCount % 2 === 1 ? '‘' : '’';
+                });
+                
+                // 替换其他标点符号
+                for (const [en, cn] of Object.entries(punctuationMap)) {
+                    if (en !== '"' && en !== "'") {
+                        result = result.replace(new RegExp('\\' + en, 'g'), cn);
+                    }
+                }
+                
+                return result;
+            }
+            
+            // 转换按钮点击事件
+            convertBtn.addEventListener('click', function() {
+                const input = inputText.value;
+                const converted = convertPunctuation(input);
+                outputText.value = converted;
+            });
+            
+            // 复制按钮点击事件
+            copyBtn.addEventListener('click', function() {
+                if (outputText.value) {
+                    outputText.select();
+                    document.execCommand('copy');
+                    
+                    // 临时改变按钮文本提示用户
+                    const originalText = copyBtn.textContent;
+                    copyBtn.textContent = '已复制!';
+                    setTimeout(() => {
+                        copyBtn.textContent = originalText;
+                    }, 1500);
+                }
+            });
+            
+            // 清空按钮点击事件
+            clearBtn.addEventListener('click', function() {
+                inputText.value = '';
+                outputText.value = '';
+                inputText.focus();
+            });
+            
+            // 实时转换（可选功能）
+            inputText.addEventListener('input', function() {
+                const input = inputText.value;
+                const converted = convertPunctuation(input);
+                outputText.value = converted;
+            });
+        });
+    </script>
+</body>
+</html>
